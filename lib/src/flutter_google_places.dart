@@ -751,7 +751,7 @@ abstract class PlacesAutocomplete {
       EdgeInsets? insetPadding,
       Widget? backArrowIcon,
       TextStyle? resultTextStyle,
-      int minCharactersForPrediction = 0}) {
+      int minCharactersForPrediction = 3}) {
     PlacesAutocompleteWidget builder(BuildContext context) =>
         PlacesAutocompleteWidget(
           apiKey: apiKey,
