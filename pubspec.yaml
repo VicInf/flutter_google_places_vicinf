@@ -39,7 +39,7 @@ dev_dependencies:
 
 flutter:
   assets:
-    - packages/flutter_google_places_hoc081098/assets/google_black.png
-    - packages/flutter_google_places_hoc081098/assets/google_white.png
+    - packages/flutter_google_places_vicinf/assets/google_black.png
+    - packages/flutter_google_places_vicinf/assets/google_white.png
 
 # dart run build_runner build --delete-conflicting-outputs
