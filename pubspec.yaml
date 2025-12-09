@@ -1,4 +1,4 @@
-name: flutter_google_places_vicinf
+name: flutter_google_places_hoc081098
 description: Google places autocomplete widgets for flutter. No wrapper, use https://pub.dartlang.org/packages/google_maps_webservice. Better flutter_google_places, updated by @hoc081098
 version: 2.0.0
 homepage: https://github.com/hoc081098/flutter_google_places
@@ -39,7 +39,7 @@ dev_dependencies:
 
 flutter:
   assets:
-    - packages/flutter_google_places_vicinf/assets/google_black.png
-    - packages/flutter_google_places_vicinf/assets/google_white.png
+    - packages/flutter_google_places_hoc081098/assets/google_black.png
+    - packages/flutter_google_places_hoc081098/assets/google_white.png
 
 # dart run build_runner build --delete-conflicting-outputs
