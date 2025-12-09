@@ -157,6 +157,10 @@ class PlacesAutocompleteWidget extends StatefulWidget {
   /// Text style for each result's text.
   final TextStyle? resultTextStyle;
 
+  /// Minimum number of characters required before making predictions.
+  /// Default is 0 (no minimum).
+  final int minCharactersForPrediction;
+
   PlacesAutocompleteWidget(
       {super.key,
       required this.apiKey,
@@ -185,7 +189,8 @@ class PlacesAutocompleteWidget extends StatefulWidget {
       this.textDecoration,
       this.textStyle,
       this.cursorColor,
-      this.resultTextStyle}) {
+      this.resultTextStyle,
+      this.minCharactersForPrediction = 0}) {
     if (apiKey == null && proxyBaseUrl == null) {
       throw ArgumentError(
           'One of `apiKey` and `proxyBaseUrl` fields is required');
@@ -563,20 +568,20 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
           extentOffset: widget.startText?.length ?? 0,
         );
 
-  late final StateConnectableStream<_SearchState> _state$ =
-      Single.fromCallable(() => const GoogleApiHeaders().getHeaders())
-          .exhaustMap(createGoogleMapsPlaces)
-          .exhaustMap(
-            (places) => _queryTextController
-                .toValueStream(replayValue: true)
-                .map((v) => v.text)
-                .debounceTime(
-                    widget.debounce ?? const Duration(milliseconds: 300))
-                .where((s) => s.isNotEmpty)
-                .distinct()
-                .switchMap((s) => _doSearch(s, places)),
-          )
-          .publishState(const _SearchState(false, null, ''));
+  late final StateConnectableStream<_SearchState> _state$ = Single.fromCallable(
+          () => const GoogleApiHeaders().getHeaders())
+      .exhaustMap(createGoogleMapsPlaces)
+      .exhaustMap(
+        (places) => _queryTextController
+            .toValueStream(replayValue: true)
+            .map((v) => v.text)
+            .debounceTime(widget.debounce ?? const Duration(milliseconds: 300))
+            .where((s) =>
+                s.isNotEmpty && s.length >= widget.minCharactersForPrediction)
+            .distinct()
+            .switchMap((s) => _doSearch(s, places)),
+      )
+      .publishState(const _SearchState(false, null, ''));
 
   StreamSubscription<void>? _subscription;
 
@@ -745,7 +750,8 @@ abstract class PlacesAutocomplete {
       Color? cursorColor,
       EdgeInsets? insetPadding,
       Widget? backArrowIcon,
-      TextStyle? resultTextStyle}) {
+      TextStyle? resultTextStyle,
+      int minCharactersForPrediction = 0}) {
     PlacesAutocompleteWidget builder(BuildContext context) =>
         PlacesAutocompleteWidget(
           apiKey: apiKey,
@@ -775,6 +781,7 @@ abstract class PlacesAutocomplete {
           insetPadding: insetPadding,
           backArrowIcon: backArrowIcon,
           resultTextStyle: resultTextStyle,
+          minCharactersForPrediction: minCharactersForPrediction,
         );
 
     switch (mode) {
